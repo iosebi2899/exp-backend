@@ -1,0 +1,7 @@
+type helloWorldResponse {
+    message: String
+}
+
+type Query {
+    helloWorld: helloWorldResponse
+}
