@@ -7,25 +7,20 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-
-
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      imports:[
+      imports: [
         ConfigModule.forRoot({
-          envFilePath: `../config/development.env`,
+          envFilePath: `../config/${
+            process.env.NODE_ENV || 'development'
+          }development.env`,
         }),
       ],
-      useFactory: async (config: ConfigService ) => ({
-        uri: config.get('mongodb+srv://AdminG:admin123@cluster0.ju00lej.mongodb.net/?retryWrites=true&w=majority'),
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-        useCreateIndex: true
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get('DATABASE'),
       }),
       inject: [ConfigService],
     }),
@@ -37,6 +32,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         path: join(process.cwd(), 'src/graphql.ts'),
         outputAs: 'class',
       },
+    }),
+    ConfigModule.forRoot({
+      envFilePath: `config/${process.env.NODE_ENV || 'development'}.env`,
+      isGlobal: true,
     }),
     UsersModule,
     GymsModule,

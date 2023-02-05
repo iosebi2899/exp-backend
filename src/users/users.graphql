@@ -1,7 +1,7 @@
-type helloWorldResponse {
+type HelloWorldResponse {
   message: String
 }
 
 type Query {
-  helloWorld: helloWorldResponse
+  helloWorld: HelloWorldResponse
 }
